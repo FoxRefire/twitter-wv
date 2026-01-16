@@ -28,8 +28,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="www.google.com"
-                    android:pathPrefix="/maps" />
+                    android:host="x.com" />
             </intent-filter>
 
             <intent-filter android:label="@string/intent_string">
@@ -40,8 +39,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="google.com"
-                    android:pathPrefix="/maps" />
+                    android:host="www.x.com" />
             </intent-filter>
 
             <intent-filter android:label="@string/intent_string">
@@ -52,7 +50,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="maps.google.com" />
+                    android:host="twitter.com" />
             </intent-filter>
 
             <intent-filter android:label="@string/intent_string">
@@ -63,7 +61,7 @@
 
                 <data
                     android:scheme="https"
-                    android:host="maps.app.goo.gl" />
+                    android:host="www.twitter.com" />
             </intent-filter>
 
             <intent-filter android:label="@string/intent_string">
@@ -74,16 +72,38 @@
 
                 <data
                     android:scheme="https"
-                    android:host="goo.gl"
-                    android:pathPrefix="/maps" />
+                    android:host="mobile.twitter.com" />
             </intent-filter>
+
             <intent-filter android:label="@string/intent_string">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="geo" />
+                <data
+                    android:scheme="https"
+                    android:host="mobile.x.com" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/intent_string">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="t.co" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/intent_string">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="twitter" />
             </intent-filter>
         </activity>
         <meta-data android:name="android.webkit.WebView.MetricsOptOut"
