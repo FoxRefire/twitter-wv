@@ -107,6 +107,11 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Enable WebView debugging in debug builds
+        if (BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+        
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -312,19 +317,24 @@ public class MainActivity extends Activity {
                     twitterCookieManager.flush();
                 }
                 //Remove banners and improve mobile experience
-                view.evaluateJavascript("var head = document.getElementsByTagName('head');\n" +
-                        "if (head.length > 0) {\n" +
-                        "    var style = document.createElement('style');\n" +
-                        "    style.setAttribute('type', 'text/css');\n" +
-                        "    style.textContent = `[data-testid='app-bar-cover'] {\n" +
-                        "        display: none !important;\n" +
-                        "    }`;\n" +
-                        "    head[0].appendChild(style);\n" +
-                        "}",null);
+                view.evaluateJavascript("(function(){" +
+                        "var head = document.getElementsByTagName('head');" +
+                        "if (head.length > 0) {" +
+                        "    var appBarStyle = document.createElement('style');" +
+                        "    appBarStyle.setAttribute('type', 'text/css');" +
+                        "    appBarStyle.textContent = `[data-testid='app-bar-cover'] {" +
+                        "        display: none !important;" +
+                        "    }`;" +
+                        "    head[0].appendChild(appBarStyle);" +
+                        "}" +
+                        "})();",null);
                 
-                // Inject ad removal script
+                // Inject scripts for X (Twitter)
                 if (url.contains("x.com") || url.contains("twitter.com")) {
-                    injectAdRemovalScript(view);
+                    injectScript(view, "adRemove.js");
+                    injectScript(view, "premiumRemove.js");
+                    injectScript(view, "swipeToCtxMenu.js");
+                    injectScript(view, "returnBird.js");
                 }
             }
         });
@@ -491,9 +501,9 @@ public class MainActivity extends Activity {
         // Clipboard listener removed for X (Twitter) - not needed for this use case
     }
     
-    private void injectAdRemovalScript(WebView view) {
+    private void injectScript(WebView view, String scriptFileName) {
         try {
-            InputStream inputStream = getAssets().open("adRemove.js");
+            InputStream inputStream = getAssets().open(scriptFileName);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             StringBuilder script = new StringBuilder();
             String line;
@@ -505,9 +515,9 @@ public class MainActivity extends Activity {
             
             // Inject the script into the page
             view.evaluateJavascript(script.toString(), null);
-            Log.d(TAG, "Ad removal script injected successfully");
+            Log.d(TAG, "Script injected successfully: " + scriptFileName);
         } catch (IOException e) {
-            Log.e(TAG, "Failed to load ad removal script", e);
+            Log.e(TAG, "Failed to load script: " + scriptFileName, e);
         }
     }
 }
